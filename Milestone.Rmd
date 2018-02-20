@@ -1,0 +1,60 @@
+---
+title: "Milestone Report"
+author: "Daniel Jungen"
+date: "20 Februar 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Milestone Report
+
+In this document we will cover some exploratory analysis of the text files that can be found in this link:
+https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
+
+First we download them to our working directory
+```{r, echo = FALSE}
+setwd("D://coursera//Capstone Project")
+library(stringi)
+```
+
+```{r}
+if (!file.exists("Coursera-SwiftKey.zip")) {
+  download.file("https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip", "Coursera-SwiftKey.zip")
+  unzip("Coursera-SwiftKey.zip")}
+```
+Since the readers of this document all speak english, we will only focus on the text files with english content.
+
+```{r, warning = FALSE, cache = TRUE}
+con <- file("final//en_US//en_US.blogs.txt")
+blogs <- readLines(con,encoding = "UTF-8", skipNul = TRUE)
+close(con)
+
+con <- file("final//en_US//en_US.twitter.txt")
+twitter <- readLines(con,encoding = "UTF-8", skipNul = TRUE)
+close(con)
+
+con <- file("final//en_US//en_US.news.txt")
+news <- readLines(con,encoding = "UTF-8", skipNul = TRUE)
+close(con)
+```
+
+In order to get an overview over the structure of the files we briefly show some figures:
+
+```{r, cache = TRUE}
+l_blogs<-length(blogs)
+l_twitter<-length(twitter)
+l_news<-length(news)
+
+n_words_blogs<-sum(stri_count_words(blogs))
+n_words_twitter<-sum(stri_count_words(twitter))
+n_words_news<-sum(stri_count_words(news))
+
+facts<-data.frame(Medium = c("Blogs", "Twitter", "News"), Lines=c(l_blogs,l_twitter,l_news), Words=c(n_words_blogs,n_words_twitter, n_words_news))
+
+facts
+
+```
+
