@@ -9,7 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Milestone Report
+# Milestone Report
+
+## Loading the data
 
 In this document we will cover some exploratory analysis of the text files that can be found in this link:
 https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
@@ -17,8 +19,14 @@ https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
 First we download them to our working directory
 ```{r, echo = FALSE}
 setwd("D://coursera//Capstone Project")
-library(stringi)
 ```
+and load the neccessary libraries
+
+```{r}
+library(stringi)
+library(tm)
+```
+
 
 ```{r}
 if (!file.exists("Coursera-SwiftKey.zip")) {
@@ -41,6 +49,8 @@ news <- readLines(con,encoding = "UTF-8", skipNul = TRUE)
 close(con)
 ```
 
+## Some analysis of the uncleaned data
+
 In order to get an overview over the structure of the files we briefly show some figures:
 
 ```{r, cache = TRUE}
@@ -52,9 +62,61 @@ n_words_blogs<-sum(stri_count_words(blogs))
 n_words_twitter<-sum(stri_count_words(twitter))
 n_words_news<-sum(stri_count_words(news))
 
-facts<-data.frame(Medium = c("Blogs", "Twitter", "News"), Lines=c(l_blogs,l_twitter,l_news), Words=c(n_words_blogs,n_words_twitter, n_words_news))
+w_p_l_blogs<-n_words_blogs/l_blogs
+w_p_l_twitter<-n_words_twitter/l_twitter
+w_p_l_news<-n_words_news/l_news
+
+facts<-data.frame(Medium = c("Blogs", "Twitter", "News"), Lines=c(l_blogs,l_twitter,l_news), Words=c(n_words_blogs,n_words_twitter, n_words_news), AVG = c(w_p_l_blogs, w_p_l_twitter, w_p_l_news))
 
 facts
 
 ```
+
+As we can see the average number of words in a tweet is much lower than the number of words in a blog or in some news. This is due to the restriction of characters in twitter. So no big surprise at all.
+
+The next thing to do is
+
+## Cleaning the data
+
+One would expect more cleaning effort when it comes to cleaning tweets. There are at least two obvious reasons:
+
+* Limitation of characters leads to strong use of abbrivations
+* As a medium used by many people not just for reading but also for writing there will be a strong use of emoticons such as ";-), :-),..." This might occur in blogs as well but is quite unlikely to appear in the news.
+
+A good but of course not representative example is the following tweet:
+```{r, cache = TRUE}
+twitter[30]
+```
+So in order to get an idea of the structure of the text we take a sample of 10% an clean it using the tm_map-function
+
+
+```{r, cache=TRUE}
+blogs_sample<-sample(blogs, length(blogs)*0.1, replace = FALSE)
+news_sample<-sample(news, length(news)*0.1, replace = FALSE)
+twitter_sample<-sample(twitter, length(twitter)*0.1, replace = FALSE)
+
+textsample<-c(blogs_sample,news_sample,twitter_sample)
+
+textcorpus<-Corpus(VectorSource(textsample))
+textcorpus<-tm_map(textcorpus, function(x) iconv(enc2utf8(x), sub = "byte"))
+
+textcorpus <- tm_map(textcorpus, removeNumbers)
+textcorpus <- tm_map(textcorpus, removePunctuation)
+textcorpus <- tm_map(textcorpus, stripWhitespace)
+textcorpus <- tm_map(textcorpus, content_transformer(tolower))
+textcorpus <- tm_map(textcorpus, removeWords, stopwords("english"))
+textcorpus <- tm_map(textcorpus, PlainTextDocument)
+
+
+
+unigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =1, max = 1))
+bigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =2, max = 2))
+trigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =3, max = 3))
+
+
+unitdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = unigramtoken))
+bitdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = bigramtoken))
+tritdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = trigramtoken))
+```
+
 
