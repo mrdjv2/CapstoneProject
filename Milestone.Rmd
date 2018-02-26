@@ -18,7 +18,7 @@ https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
 
 First we download them to our working directory
 ```{r, echo = FALSE}
-setwd("D://coursera//Capstone Project")
+#setwd("C://coursera//Capstone Project")
 ```
 and load the neccessary libraries
 
@@ -27,6 +27,7 @@ library(stringi)
 library(tm)
 library(textreg)
 library(tokenizers)
+library(RWeka)
 ```
 
 
@@ -93,9 +94,9 @@ So in order to get an idea of the structure of the text we take a sample of 10% 
 
 
 ```{r, cache=TRUE}
-blogs_sample<-sample(blogs, length(blogs)*0.1, replace = FALSE)
-news_sample<-sample(news, length(news)*0.1, replace = FALSE)
-twitter_sample<-sample(twitter, length(twitter)*0.1, replace = FALSE)
+blogs_sample<-sample(blogs, length(blogs)*0.005, replace = FALSE)
+news_sample<-sample(news, length(news)*0.005, replace = FALSE)
+twitter_sample<-sample(twitter, length(twitter)*0.005, replace = FALSE)
 
 textsample<-c(blogs_sample,news_sample,twitter_sample)
 
@@ -106,10 +107,10 @@ textcorpus <- tm_map(textcorpus, removeNumbers)
 textcorpus <- tm_map(textcorpus, removePunctuation)
 textcorpus <- tm_map(textcorpus, stripWhitespace)
 textcorpus <- tm_map(textcorpus, content_transformer(tolower))
-textcorpus <- tm_map(textcorpus, removeWords, stopwords("english"))
+textcorpus <- tm_map(textcorpus, removeWords, stopwords("en"))
 textcorpus <- tm_map(textcorpus, PlainTextDocument)
 
-one_gram<-tokenize_ngrams(text, n = 1, n_min = 1)
+#one_gram<-tokenize_ngrams(text, n = 1, n_min = 1)
 
 unigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =1, max = 1))
 bigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =2, max = 2))
@@ -119,6 +120,16 @@ trigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =3, max = 3))
 unitdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = unigramtoken))
 bitdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = bigramtoken))
 tritdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = trigramtoken))
+
+getFreq <- function(tdm) {
+  freq <- sort(rowSums(as.matrix(tdm)), decreasing = TRUE)
+  return(data.frame(word = names(freq), freq = freq))
+}
+
+freq1 <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus, control = list(tokenize = unitdm)), 0.9999))
+#freq2 <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus, control = list(tokenize = bitdm)), 0.9999))
+#freq3 <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus, control = list(tokenize = tritdm)), 0.9999))
+
 ```
 
 
