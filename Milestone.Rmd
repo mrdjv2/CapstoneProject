@@ -1,7 +1,7 @@
 ---
 title: "Milestone Report"
 author: "Daniel Jungen"
-date: "20 Februar 2018"
+date: "14 March 2018"
 output: html_document
 ---
 
@@ -18,11 +18,11 @@ https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip
 
 First we download them to our working directory
 ```{r, echo = FALSE}
-#setwd("C://coursera//Capstone Project")
+setwd("D://coursera//Capstone Project")
 ```
 and load the neccessary libraries
 
-```{r}
+```{r, message=FALSE, warning = FALSE}
 library(stringi)
 library(tm)
 library(textreg)
@@ -40,15 +40,15 @@ Since the readers of this document all speak english, we will only focus on the 
 
 ```{r, warning = FALSE, cache = TRUE}
 con <- file("final//en_US//en_US.blogs.txt")
-blogs <- readLines(con,encoding = "UTF-8", skipNul = TRUE)
+blogs <- readLines(con,encoding = "utf-8", skipNul = TRUE)
 close(con)
 
 con <- file("final//en_US//en_US.twitter.txt")
-twitter <- readLines(con,encoding = "UTF-8", skipNul = TRUE)
+twitter <- readLines(con,encoding = "utf-8", skipNul = TRUE)
 close(con)
 
 con <- file("final//en_US//en_US.news.txt")
-news <- readLines(con,encoding = "UTF-8", skipNul = TRUE)
+news <- readLines(con,encoding = "utf-8", skipNul = TRUE)
 close(con)
 ```
 
@@ -90,18 +90,20 @@ A good but of course not representative example is the following tweet:
 ```{r, cache = TRUE}
 twitter[30]
 ```
-So in order to get an idea of the structure of the text we take a sample of 10% an clean it using the tm_map-function
+So in order to get an idea of the structure of the text we take a sample of 0.1% (due to memory restrictions) and clean it using the tm_map-function:
 
 
 ```{r, cache=TRUE}
-blogs_sample<-sample(blogs, length(blogs)*0.005, replace = FALSE)
-news_sample<-sample(news, length(news)*0.005, replace = FALSE)
-twitter_sample<-sample(twitter, length(twitter)*0.005, replace = FALSE)
+
+set.seed(4711)
+blogs_sample<-sample(blogs, length(blogs)*0.001, replace = FALSE)
+news_sample<-sample(news, length(news)*0.001, replace = FALSE)
+twitter_sample<-sample(twitter, length(twitter)*0.001, replace = FALSE)
 
 textsample<-c(blogs_sample,news_sample,twitter_sample)
 
-textcorpus<-Corpus(VectorSource(textsample))
-textcorpus<-tm_map(textcorpus, function(x) iconv(enc2utf8(x), sub = "byte"))
+textcorpus<-VCorpus(VectorSource(textsample))
+
 
 textcorpus <- tm_map(textcorpus, removeNumbers)
 textcorpus <- tm_map(textcorpus, removePunctuation)
@@ -110,26 +112,28 @@ textcorpus <- tm_map(textcorpus, content_transformer(tolower))
 textcorpus <- tm_map(textcorpus, removeWords, stopwords("en"))
 textcorpus <- tm_map(textcorpus, PlainTextDocument)
 
-#one_gram<-tokenize_ngrams(text, n = 1, n_min = 1)
-
 unigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =1, max = 1))
 bigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =2, max = 2))
 trigramtoken <- function(x) NGramTokenizer(x, Weka_control(min =3, max = 3))
 
-
-unitdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = unigramtoken))
-bitdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = bigramtoken))
-tritdm <- TermDocumentMatrix(textcorpus, control = list(tokenize = trigramtoken))
 
 getFreq <- function(tdm) {
   freq <- sort(rowSums(as.matrix(tdm)), decreasing = TRUE)
   return(data.frame(word = names(freq), freq = freq))
 }
 
-freq1 <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus, control = list(tokenize = unitdm)), 0.9999))
-#freq2 <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus, control = list(tokenize = bitdm)), 0.9999))
-#freq3 <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus, control = list(tokenize = tritdm)), 0.9999))
+freq_one_word <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus), 0.9999))
 
+freq_two_words <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus, control = list(tokenize = bigramtoken)), 0.9999))
+
+freq_three_words <- getFreq(removeSparseTerms(TermDocumentMatrix(textcorpus, control = list(tokenize = trigramtoken)), 0.9999))
+```
+
+
+```{r}
+head(freq_one_word)
+head(freq_two_words)
+head(freq_three_words)
 ```
 
 
