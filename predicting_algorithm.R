@@ -1,5 +1,3 @@
-setwd("D:/Coursera/Capstone Project")
-
 
 freq2_gr1<-readRDS("freq2_gr1.rds")
 freq3_gr1<-readRDS("freq3_gr1.rds")
