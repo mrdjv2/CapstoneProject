@@ -18,10 +18,20 @@ library(shiny)
 
 server <- function(input, output) {
         
- 
         
-        #output$textoutput <- renderText(predict(input$textbox))
+               wordprediction <-reactive({
+                       
+                text <- input$textbox
+                prediction <- predict(text)
+                
+                
+                
+        })
         
+        
+        
+        
+        output$textoutput <- renderPrint(wordprediction()) #renderPrint(text)
         
         }
 

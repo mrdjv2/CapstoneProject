@@ -6,6 +6,8 @@ freq5_gr1<-readRDS("freq5_gr1.rds")
 freq6_gr1<-readRDS("freq6_gr1.rds")
 
 library(dplyr)
+library(tm)
+library(stringr)
 
 predict <- function(phrase){
         
@@ -13,6 +15,10 @@ predict <- function(phrase){
         
         phrase<- tolower(phrase)
         phrase <- gsub("'", '', phrase)
+        phrase <- removePunctuation(phrase)
+        phrase <- removeNumbers(phrase)
+        phrase <- str_replace_all(phrase, "[^[:alnum:]]", " ")
+        phrase <- stripWhitespace(phrase)
         
         
         
@@ -117,6 +123,6 @@ predict <- function(phrase){
                 
         }
         
-        return(predicted_word)
+        print(predicted_word)
         
 }
