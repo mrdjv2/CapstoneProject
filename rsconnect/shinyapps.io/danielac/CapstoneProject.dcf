@@ -1,0 +1,13 @@
+name: CapstoneProject
+title: CapstoneProject
+username:
+account: danielac
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 317327
+bundleId: 1307661
+url: https://danielac.shinyapps.io/CapstoneProject/
+when: 1523126835.94056
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: freq_one_word.rds|freq_three_words.rds|freq_two_words.rds|Milestone.Rmd|README.md

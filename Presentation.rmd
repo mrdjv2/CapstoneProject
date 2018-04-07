@@ -1,0 +1,39 @@
+---
+title: "Capstone Project - Word Prediction"
+author: "Daniel Jungen"
+date: "7 April 2018"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+In the Data Science Specialization the capstone project was to build an algorithm embedded into a shiny app that predicts the next word based on a given phrase.
+
+As data to learn from there were raw text files containing content from news, blogs and twitter.
+
+In the next slides you will see the aproach from the very beginning to the final implementation of the algorithm in a shiny app.
+
+## First steps
+
+After downloading the data the first step was to do some exploratory analysis in order to find out about the size of the data in general (i.e. number of lines, numbers of words, etc).
+
+From looking at several examples one could quickly learn that the text itself was not as clean as we might wanted it to be. One example from Twitter is "I love you, and I'm so proud of you. From sitting on those stairs on The X Factor, to now. You boys are my inspiration.â™¥ :) xx".
+
+This is more or less a plain text but it contains some expressions that no algorithm can progress with good reason, such as "â™¥ :) xx".
+
+## Cleaning the data
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
