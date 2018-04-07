@@ -116,12 +116,18 @@ predict <- function(phrase){
                         predicted_word<-predictor[1,2]
                 }
                 
-                if(dim(predictor)[2]==0){
+                if(dim(predictor)[1]==0 || dim(predictor)[2]==0){
                         predicted_word<-"you" #standard prediction if no better one can be determined.
                         #this is the most frequent single word used.
                 }
                 
         }
+        
+
+        if(length_phrase == 0){
+                predicted_word<-"you" #standard prediction if no better one can be determined.
+                        #this is the most frequent single word used.
+                }
         
         print(predicted_word)
         
