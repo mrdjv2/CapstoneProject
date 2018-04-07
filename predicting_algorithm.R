@@ -36,7 +36,7 @@ predict <- function(phrase){
         
         if(length_phrase == 5){
                 
-                predictor <- freq6_gr1[freq6_gr1$input == phrase]
+                predictor <- freq6_gr1[freq6_gr1$input == phrase,]
                 
                 if(dim(predictor)[1] >0 & dim(predictor)[2]>0){
                         predictor <- predictor[order(-predictor$frequency),]
@@ -54,7 +54,7 @@ predict <- function(phrase){
         
         if(length_phrase == 4){
                 
-                predictor <- freq5_gr1[freq5_gr1$input == phrase]
+                predictor <- freq5_gr1[freq5_gr1$input == phrase,]
                 
                 if(dim(predictor)[1] >0 & dim(predictor)[2]>0){
                         predictor <- predictor[order(-predictor$frequency),]

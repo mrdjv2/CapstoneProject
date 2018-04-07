@@ -1,19 +1,20 @@
-
-
 library(shiny)
 
-# Define UI for application that draws a histogram
-shinyUI(fluidPage(
+fluidPage(
   
-  # Application title
-  titlePanel("Predicting words"),
   
-  #input text here
-  textInput("textbox", "Enter text here", value = "", width = NULL, placeholder = NULL),
-  
-  actionButton("predict", "Predict next word"),
-  
-  textOutput("textoutput")
-
+  mainPanel(
+    h3("Introduction:"),
+    h5("This application takes your string and predict the next world"),
+    h3("Method:"),
+    h5("Use MLE of n-gram algorithm"),
+    
+    textInput("Tcir",label=h3("Type your sentence here:")),
+    submitButton('Submit'),
+    h4('string you entered : '),
+    verbatimTextOutput("inputValue"),
+    h4('next word :'),
+    verbatimTextOutput("prediction")
+    
   )
 )

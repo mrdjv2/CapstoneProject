@@ -1,6 +1,3 @@
-suppressPackageStartupMessages(c(
-        library(dplyr),
-        library(shiny)))
 
 source("predicting_algorithm.R")
 
@@ -11,28 +8,18 @@ freq4_gr1<-readRDS("./freq4_gr1.rds")
 freq5_gr1<-readRDS("./freq5_gr1.rds")
 freq6_gr1<-readRDS("./freq6_gr1.rds")
 
-
-
-
 library(shiny)
-
-server <- function(input, output) {
-        
-        
-               wordprediction <-reactive({
-                       
-                text <- input$textbox
-                prediction <- predict(text)
-                
-                
-                
-        })
-        
-        
-        
-        
-        output$textoutput <- renderPrint(wordprediction()) #renderPrint(text)
-        
-        }
+library(tm)
+library(dplyr)
 
 
+
+shinyServer(
+  function(input, output) {
+    output$inputValue <- renderPrint({input$Tcir})
+    output$prediction <- renderPrint({predict(input$Tcir)})
+    
+    
+    
+  }
+)
