@@ -33,15 +33,17 @@ Of course we also transform the words to lower characters.
 
 The next step is to learn from the data.
 
-## Learning from the data
-
 Due to memory restrictions we take a random sample of only 0.1% without replacement of the whole data and perform a frequency-analysis of the appearing n-grams (1 to 6).
 
 To gain more stastistical stability we repeat this procedure over and over again (100 times) and add up the the frequencies of the found n-grams.
 
-After that we have a basis for a prediction:
+## Building a prediction algorithm
 
-1.) If a phrase is given which is longer than 5(!) words, take the last 5 words of the phrase.
-2.) Search the 6-gram-table for a 5-gram that starts with the five words of the phrase and use the 6th word as a predictor.
-3.) If no predictor can be found, take the last 4 words of the original phrase and repeat that method with the 5-gram-table.
-4.) Continue until a predictor is found. If no predictor can be found in any table, set "you" as the standard predictor since "you" is the most frequent used word.
+Now we have a basis for a prediction:
+
+1. If a phrase is given which is longer than 5(!) words, take the last 5 words of the phrase.
+2. Search the 6-gram-table for a 5-gram that starts with the five words of the phrase and use the 6th word as a predictor.
+3. If no predictor can be found, take the last 4 words of the original phrase and repeat that method with the 5-gram-table.
+4. Continue until a predictor is found. If no predictor can be found in any table, set "you" as the standard predictor since "you" is the most frequent used word.
+
+The app can be found under https://danielac.shinyapps.io/CapstoneProject/

@@ -121,13 +121,22 @@
 
 <p>The next step is to learn from the data.</p>
 
-</article></slide><slide class=''><hgroup><h2>Learning from the data</h2></hgroup><article  id="learning-from-the-data">
-
 <p>Due to memory restrictions we take a random sample of only 0.1% without replacement of the whole data and perform a frequency-analysis of the appearing n-grams (1 to 6).</p>
 
 <p>To gain more stastistical stability we repeat this procedure over and over again (100 times) and add up the the frequencies of the found n-grams.</p>
 
-<p>After that we have a basis for a prediction.</p></article></slide>
+</article></slide><slide class=''><hgroup><h2>Building a prediction algorithm</h2></hgroup><article  id="building-a-prediction-algorithm">
+
+<p>Now we have a basis for a prediction:</p>
+
+<ol>
+<li>If a phrase is given which is longer than 5(!) words, take the last 5 words of the phrase.</li>
+<li>Search the 6-gram-table for a 5-gram that starts with the five words of the phrase and use the 6th word as a predictor.</li>
+<li>If no predictor can be found, take the last 4 words of the original phrase and repeat that method with the 5-gram-table.</li>
+<li>Continue until a predictor is found. If no predictor can be found in any table, set &quot;you&quot; as the standard predictor since &quot;you&quot; is the most frequent used word.</li>
+</ol>
+
+<p>The app can be found under <a href='https://danielac.shinyapps.io/CapstoneProject/' title=''>https://danielac.shinyapps.io/CapstoneProject/</a></p></article></slide>
 
 
   <slide class="backdrop"></slide>
