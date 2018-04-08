@@ -31,6 +31,7 @@ predict <- function(phrase){
                 phrase_split<-phrase_split[[1]][-1:-(length(phrase_split[[1]])-5)]
                 
                 phrase<-paste(phrase_split[[1]],phrase_split[[2]],phrase_split[[3]],phrase_split[[4]],phrase_split[[5]])
+                length_phrase<-length(phrase_split)
                 
         }
         

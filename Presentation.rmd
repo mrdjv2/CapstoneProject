@@ -1,0 +1,47 @@
+---
+title: "Capstone Project - Word Prediction"
+author: "Daniel Jungen"
+date: "7 April 2018"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+In the Data Science Specialization the capstone project was to build an algorithm embedded into a shiny app that predicts the next word based on a given phrase.
+
+As data to learn from there were raw text files containing content from news, blogs and twitter.
+
+In the next slides you will see the aproach from the very beginning to the final implementation of the algorithm in a shiny app.
+
+## First steps
+
+After downloading the data the first step was to do some exploratory analysis in order to find out about the size of the data in general (i.e. number of lines, numbers of words, etc).
+
+From looking at several examples one could quickly learn that the text itself was not as clean as we might wanted it to be. One example from Twitter is "I love you, and I'm so proud of you. From sitting on those stairs on The X Factor, to now. You boys are my inspiration.â™¥ :) xx".
+
+This is more or less a plain text but it contains some expressions that no algorithm can progress with good reason, such as "â™¥ :) xx".
+
+## Cleaning the data
+As seen in the previous slide it is neccessary to transform the data into a format that can be processed with some structure.
+We realize that by removing punctuation, numbers, unneccessary spaces, stopwords, words of profanity and words that contain non-latin-letters.
+
+Of course we also transform the words to lower characters.
+
+The next step is to learn from the data.
+
+## Learning from the data
+
+Due to memory restrictions we take a random sample of only 0.1% without replacement of the whole data and perform a frequency-analysis of the appearing n-grams (1 to 6).
+
+To gain more stastistical stability we repeat this procedure over and over again (100 times) and add up the the frequencies of the found n-grams.
+
+After that we have a basis for a prediction.
+
+```{r pressure}
+plot(pressure)
+```
+
